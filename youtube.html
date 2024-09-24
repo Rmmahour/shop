@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>YouTube Downloader</title>
+</head>
+<body>
+    <h1 class="heading">My Own YouTube Downloader !</h1>
+    <input class="URL-input" placeholder="Video URL e.g. https://www.youtube.com/watch?v=MtN1YnoL46Q">
+    <button class="convert-button">Convert</button>
+
+    <footer>
+        <script>
+
+var convertBtn = document.querySelector('.convert-button');
+var URLinput = document.querySelector('.URL-input');
+convertBtn.addEventListener('click', () => {
+    console.log(`URL: ${URLinput.value}`);
+    sendURL(URLinput.value);
+});
+function sendURL(URL) {
+    fetch(`http://localhost:50505/download?URL=${URL}`, {
+        method:'GET'
+    }).then(res => res.json())
+    .then(json => console.log(json));
+}
+        </script>
+
+    </footer>
+</body>
+</html>

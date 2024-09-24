@@ -1,0 +1,251 @@
+body    {
+    background-color: blue;
+    height: 1500px;
+    a   {
+        text-decoration: none;
+        color: #000;
+    }
+}
+
+
+
+header{
+    display: flex;
+    justify-content: space-between;
+    background-color: rgb(162, 153, 153);
+    color: #000;
+    padding: 15px;
+
+    h1  {
+        font-size: 70px;
+    }
+
+    p {
+        padding-left: 20px;
+        font-size: 15px;
+        font-family: Arial;
+    }
+}
+
+#adminpage {
+    background-color: #fff;
+    height: 250px;
+    h1{
+        text-align: center;
+    }
+    button{
+        margin-top: 25px;
+    }
+}
+
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgb(180, 166, 166);
+    padding: 10px;
+    font-size: 25px;
+    font-weight: bold;
+
+}
+
+#about  {
+    border: 1px solid#000;
+    background-color: #fff;
+    padding: 15px;
+}
+
+#adminLogin {
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+
+    div {
+        background-color: #000;
+        border: 1px solid#000;
+        border-radius: 5px;
+        color: #fff;
+        padding: 20px;
+        margin: 30px;
+
+        span {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+    }
+
+}
+
+#product-resgiter{
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+    div {
+        background-color: #000;
+        border: 1px solid#000;
+        border-radius: 5px;
+        color: #fff;
+        width: 350px;
+        padding: 20px;
+        margin: 20px;
+
+        a   {
+            text-decoration: underline;
+            color: #fff;
+        }
+
+        span {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+    }
+}
+
+#login-form {
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+    div {
+        background-color: #000;
+        border: 1px solid#000;
+        border-radius: 5px;
+        color: #fff;
+        width: 350px;
+        padding: 20px;
+        margin: 20px;
+
+        a   {
+            text-decoration: underline;
+            color: #fff;
+        }
+
+        span {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+    }
+}
+
+#register   {
+    display: flex;
+    background-color: #fff;
+    justify-content: center;
+        #Register-form   {
+        margin-top: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #000;
+        border-radius: 20px;
+        background-color: #000;
+        color: #fff;
+        padding: 20px;
+    dl {
+        width: 750px;
+        overflow: hidden;
+        padding: 10px;
+        margin: 0;
+      }
+      dt {
+        float: left;
+        width: 50%;
+        padding: 10;
+        margin: 0;
+      }
+      dd {
+        float: left;
+        width: 50%;
+        padding: 10;
+        margin-bottom: 5px;
+      }
+    }
+}
+
+#catalog    {
+    h4  {
+        padding: 5px;
+    }
+    background-color: #fff;
+    #head     {
+        background-color: #000;
+        padding: 10px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        p   {
+            text-align: center;
+            font-size: 30px;
+            color: red;
+            font-weight: bold;
+            font-style: italic;
+        }
+    }
+
+    #main-catalog   {
+        margin-top: 5px;
+        display: grid;
+        grid-template-columns: 2fr 7fr 3fr;
+    }
+
+    #left, #right  {
+        padding: 10px;
+        border: 1px solid #000;
+        border-radius: 5px;
+        margin: 5px;
+    }
+}
+
+@media screen and (orientation:landscape) {
+    #cards  {
+        display: flex;
+    }
+
+    .card   {
+        
+        width: 24.4%;
+    }
+}
+
+@media screen and (orientation:portrait) {
+    #cards  {
+        display: block;
+    }
+    .card   {
+        width: 100%;
+    }
+}
+
+#center {
+    display: flex;
+    flex-wrap: wrap;
+
+    .card   {
+        width: 200px;
+    }
+}
+
+
+#pages {
+    display: flex;
+    justify-content: center;
+    background-color: #fff;
+    #adminUse {
+        background-color: #000;
+        color: #fff;
+    }
+    button{
+        justify-content: center;
+        display: flex;
+    }
+}
+
+#delete-table{
+    background-color: #000;
+    color: #fff;
+}
+#delete-body{
+    margin: 20px;
+    padding: 20px;
+}

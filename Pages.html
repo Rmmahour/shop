@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./node_modules/bootstrap-icons/font/bootstrap-icons.css">
+    <!-- <link rel="shortcut-icon" href="./public/favicon.ico"> -->
+    <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.css">
+    <script src="./node_modules/jquery/dist/jquery.js"></script>
+    <script src="./node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
+    <script src="./node_modules/jquery.cookie/jquery.cookie.js"></script>
+    <script src="./javascript/index.js"></script>
+    <link rel="stylesheet" href="./styles/index.css">
+    <title>I-shop</title>
+    <script>
+        function LoadAdminUse(url){
+            $.ajax({
+                method:"get",
+                url:url,
+                success:(data)=>{
+                    $("#adminUse").html(data);
+                }
+            })
+        }
+
+        function LoadDeleteProduct(){
+            $.ajax({
+                    method:"get",
+                    url:"http://127.0.0.1:50505/Products",
+                    success:(data)=>{
+                        $.each(data,(key,product)=>{
+                            $("#delete-tbody").append(`
+                                <tr>
+                                    <td>${product.Id}</td>
+                                    <td>${product.Title}</td>
+                                    <td>${product.Price}</td>
+                                    <td><button name="${product.Id}" class="btn btn-outline-danger"><span class="bi bi-trash"></span></button>
+                                </tr>
+                            `);
+                            // $("#product-id-select").append(`
+                            // <option>${product.Id}</option>
+                            // `);
+                            // $("#product-category-select").append(`
+                            // <option>${product.Category}</option>
+                            // `);
+                        })
+                    }
+                })
+        }
+
+
+        function LoadProduct(url){
+            $.ajax({
+                    method:"get",
+                    url:url,
+                    success:(data)=>{
+                        $.each(data,(key,product)=>{
+                            $("#product-title-select").append(`
+                            <option>${product.Title}</option>
+                            `);
+                            $("#product-id-select").append(`
+                            <option>${product.Id}</option>
+                            `);
+                            $("#product-category-select").append(`
+                            <option>${product.Category}</option>
+                            `);
+                        })
+                    }
+                })
+        }
+
+        function ProductChange(e){
+            var Product = $("#product-title-select").val();
+            if(Product==$("#product-title-select").val()){
+                LoadProduct(`http://127.0.0.1:50505/Products/Title/${Product}`);
+            }else{
+                LoadProduct(`http://127.0.0.1:50505/Products`);
+            }
+        }
+
+        $(function(){
+
+            $(document).on("click","#btnAddProduct",()=>{
+                var Product = {
+                    Id: $("#productId").val(),
+                    Title: $("#productTitle").val(),
+                    Image: $("#productImage").val(),
+                    Price: $("#productPrice").val(),
+                    Category: $("#productCategory").val()
+                };
+        
+                $.ajax({
+                    method:"post",
+                    url:"http://127.0.0.1:50505/newProduct",
+                    data:Product
+                });
+                alert("Product Added");
+            })
+
+            $(document).on("click","#addCategory",()=>{
+                var new_Category = {
+                    Category: $("#CategoryName").val()
+                };
+        
+                $.ajax({
+                    method:"post",
+                    url:"http://127.0.0.1:50505/newCategory",
+                    data:new_Category
+                });
+                alert("Product Added");
+            })
+
+            $(document).on("click","#addAdmin",()=>{
+                var new_Admin = {
+                    Id: $("#adminId").val(),
+                    Name: $("#adminName").val(),
+                    Gender: $("#adminGender").val(),
+                    Age: $("#adminAge").val(),
+                    Role: $("#adminRole").val()
+                };
+        
+                $.ajax({
+                    method:"post",
+                    url:"http://127.0.0.1:50505/newAdmin",
+                    data:new_Admin
+                });
+                alert("Admin Added");
+            })
+
+            $(document).on("click","#removeAdmin",()=>{
+
+
+                $.ajax({
+                    method:"delete",
+                    url:"http://127.0.0.1:50505/removeAdmin",
+                });
+                alert("Admin Removed");
+            })
+
+
+            $(document).on("click","#addProduct",(req,res)=>{
+                alert("clicked");
+                LoadAdminUse("add-product.html");
+            })
+
+            $(document).on("click","#updateProduct",(req,res)=>{
+                alert("clicked");
+                LoadAdminUse("update-product.html");
+            })
+
+            $(document).on("click","#deleteProduct",(req,res)=>{
+                LoadDeleteProduct();
+                LoadAdminUse("delete-product.html");
+            })
+
+            $(document).on("click","#addCategory",(req,res)=>{
+                alert("clicked");
+                LoadAdminUse("add-category.html");
+            })
+
+            $(document).on("click","#deleteCategory",(req,res)=>{
+                alert("clicked");
+                LoadAdminUse("delete-category.html");
+            })
+
+            $(document).on("click","#addAdmin",(req,res)=>{
+                alert("clicked");
+                LoadAdminUse("add-admin.html");
+            })
+
+            $(document).on("click","#removeAdmin",(req,res)=>{
+                alert("clicked");
+                $.ajax({
+                    method:"get",
+                    url:"http://127.0.0.1:50505/Admins",
+                    success:(data)=>{
+                        $.each(data,(key,admin)=>{
+                            $("#delete-admin").html(`
+                                    <tr style="color:#fff;">
+                                        <td>${admin.Name}</td>
+                                        <td>${admin.AdminId}</td>
+                                        <td><button class="btn btn-danger" name="${admin.Name}" id="DeleteAdmin"><span class="bi bi-trash-fill"></span></button></td>
+                                    </tr>
+                                `);
+                        })
+                    }
+                })
+                LoadAdminUse("delete-admin.html");
+            })
+
+            $(document).on("click","#DeleteAdmin",(Name)=>{
+                $.ajax({
+                    method:"delete",
+                    url:"http://127.0.0.1:50505/"
+                })
+            })
+
+
+            $(document).on("click","#removeUser",(req,res)=>{
+                alert("clicked");
+                LoadAdminUse("delete-user.html");
+            })
+        })
+    </script>
+</head>
+<body>
+    <header class="d-flex flex-wrap">
+        <div>
+            <h1><font face="Edwardian Script ITC" color="red"><b>I Shop-Model</b></font></h1>
+        </div>
+        <div>
+            <p id="head-p">A model for<br>Smart Shopping</p>
+            
+        </div>
+    </header>
+    <nav class="d-flex flex-wrap">
+        <button id="addProduct" href="add-product.html" class="btn btn-primary">Add Product</button>
+        <button id="updateProduct" href="update-product.html" class="btn btn-warning">Update Product</button>
+        <button id="deleteProduct" href="delete-product.html" class="btn btn-danger">Delete Product</button>
+        <button id="addCategory" href="add-category.html" class="btn btn-primary">Add Category</button>
+        <button id="removeUser" href="delete-user.html" class="btn btn-danger">Remove User</button>
+        <button id="addAdmin" href="add-admin.html" class="btn btn-primary">Add Admin</button>
+        <button id="removeAdmin" href="delete-admin.html" class="btn btn-danger">Remove Admin</button>
+    </nav>
+    <div id="pages">
+        <h1 class="justify-content-center">Welcome Our Admin</h1>
+    </div>
+    <div class="d-flex justify-content-center" style="background-color: #fff;">
+        <div id="adminUse" class="w-25">
+            
+        </div>
+    </div>
+</body>
+</html>
+
+<!-- 
+
+
+
+     <ul style="list-style:none;">
+         <li>${User.FirstName} ${User.LastName}</li>
+             <li>${User.Date_Of_Birth}</li>
+             <li>${User.Email}</li>
+             <li>${User.Gender}</li>
+             <li>${User.Mobile}</li>
+             <li>${User.Street} ${User.City} ${User.State} ${User.Pincode} ${User.Country}</li>
+         </ul> -->
+<!-- 
+<div id="detail-modal">
+    <ul style="list-style:none;">
+        <li id="lblUsername"></li>
+        <li id="lblDob"></li>
+        <li id="lblEmail"></li>
+        <li id="lbGender"></li>
+        <li id="lblMobile"></li>
+        <li id="lblAddress"></li>
+    </ul>
+</div> -->

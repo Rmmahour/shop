@@ -1,0 +1,267 @@
+body {
+  background-color: blue;
+  height: 1500px;
+}
+body a {
+  text-decoration: none;
+  color: #000;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  background-color: rgb(162, 153, 153);
+  color: #000;
+  padding: 15px;
+}
+header h1 {
+  font-size: 70px;
+}
+header p {
+  padding-left: 20px;
+  font-size: 15px;
+  font-family: Arial;
+}
+
+#adminpage {
+  background-color: #fff;
+  height: 250px;
+}
+#adminpage h1 {
+  text-align: center;
+}
+#adminpage button {
+  margin-top: 25px;
+}
+
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: rgb(180, 166, 166);
+  padding: 10px;
+  font-size: 25px;
+  font-weight: bold;
+}
+
+#about {
+  border: 1px solid #000;
+  background-color: #fff;
+  padding: 15px;
+}
+
+#adminLogin {
+  background-color: #fff;
+  display: flex;
+  justify-content: center;
+}
+#adminLogin div {
+  background-color: #000;
+  border: 1px solid #000;
+  border-radius: 5px;
+  color: #fff;
+  padding: 20px;
+  margin: 30px;
+}
+#adminLogin div span {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+#product-resgiter {
+  background-color: #fff;
+  display: flex;
+  justify-content: center;
+}
+#product-resgiter div {
+  background-color: #000;
+  border: 1px solid #000;
+  border-radius: 5px;
+  color: #fff;
+  width: 350px;
+  padding: 20px;
+  margin: 20px;
+}
+#product-resgiter div a {
+  text-decoration: underline;
+  color: #fff;
+}
+#product-resgiter div span {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+#login-form {
+  background-color: #fff;
+  display: flex;
+  justify-content: center;
+}
+#login-form div {
+  background-color: #000;
+  border: 1px solid #000;
+  border-radius: 5px;
+  color: #fff;
+  width: 350px;
+  padding: 20px;
+  margin: 20px;
+}
+#login-form div a {
+  text-decoration: underline;
+  color: #fff;
+}
+#login-form div span {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+#register {
+  display: flex;
+  background-color: #fff;
+  justify-content: center;
+}
+#register #Register-form {
+  margin-top: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #000;
+  border-radius: 20px;
+  background-color: #000;
+  color: #fff;
+  padding: 20px;
+}
+#register #Register-form dl {
+  width: 750px;
+  overflow: hidden;
+  padding: 10px;
+  margin: 0;
+}
+#register #Register-form dt {
+  float: left;
+  width: 50%;
+  padding: 10;
+  margin: 0;
+}
+#register #Register-form dd {
+  float: left;
+  width: 50%;
+  padding: 10;
+  margin-bottom: 5px;
+}
+
+#catalog {
+  background-color: #fff;
+}
+#catalog h4 {
+  padding: 5px;
+}
+#catalog #head {
+  background-color: #000;
+  padding: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+#catalog #head p {
+  text-align: center;
+  font-size: 30px;
+  color: red;
+  font-weight: bold;
+  font-style: italic;
+}
+#catalog #main-catalog {
+  margin-top: 5px;
+  display: grid;
+  grid-template-columns: 2fr 7fr 3fr;
+}
+#catalog #left, #catalog #right {
+  padding: 10px;
+  border: 1px solid #000;
+  border-radius: 5px;
+  margin: 5px;
+}
+
+@media screen and (orientation: landscape) {
+  #cards {
+    display: flex;
+  }
+  .card {
+    width: 24.4%;
+  }
+}
+@media screen and (orientation: portrait) {
+  #cards {
+    display: block;
+  }
+  .card {
+    width: 100%;
+  }
+}
+#center {
+  display: flex;
+  flex-wrap: wrap;
+}
+#center .card {
+  width: 200px;
+}
+
+#pages {
+  display: flex;
+  justify-content: center;
+  background-color: #fff;
+}
+#pages #adminUse {
+  background-color: #000;
+  color: #fff;
+}
+#pages button {
+  justify-content: center;
+  display: flex;
+}
+
+#delete-table {
+  background-color: #000;
+  color: #fff;
+}
+
+#delete-body {
+  margin: 20px;
+  padding: 20px;
+}
+
+/*# sourceMappingURL=index.css.map */
+* {
+  text-align: center;
+}
+.heading {
+  font-family: Arial;
+  margin-top:40vh;
+}
+.URL-input, .convert-button {
+  font-size:1.3em;
+  padding:5px 10px;
+}
+.URL-input {
+  border-radius:4px 0px 0px 4px;
+  width:30em;
+  text-align: left;
+  border:2px solid #EEEEEE;
+  background: #EEEEEE;
+  outline:none;
+}
+.URL-input:focus {
+  border:2px solid #0485ff;
+}
+.convert-button {
+  border-radius:0px 4px 4px 0px;
+  border:2px solid #0485ff;
+  background: #0485ff;
+  color:white;
+}
+
+#qrcode {
+  width: 256px;
+  height: 256px;
+  margin-top:15px;
+}

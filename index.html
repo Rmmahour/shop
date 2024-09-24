@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./node_modules/bootstrap-icons/font/bootstrap-icons.css">
+    <!-- <link rel="shortcut-icon" href="./public/favicon.ico"> -->
+    <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.css">
+    <script src="./node_modules/jquery/dist/jquery.js"></script>
+    <script src="./node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
+    <script src="./javascript/index.js"></script>
+    <script src="./node_modules/jquery.cookie/jquery.cookie.js"></script>
+    <link rel="stylesheet" href="./styles/index.css">
+    <title>I-shop</title>
+    <style>
+        
+        #cards p::first-letter {
+            margin-left: 50px;
+        }
+        #detail-modal div   {
+            display: flex;
+        }
+        #main-body  {
+            margin-left: 100px;
+            margin-right: 100px;
+        }
+
+        
+    </style>
+    <script>
+
+        function Loadcookie(){
+            if($.cookie("User")===undefined || $.cookie("User")===""){
+                        $("#loginRegisterForm").css("display","block");
+                        $("#logoutBotton").css("display","none");
+                    }else{
+                        CartCount();
+                        LoadCartitems();
+                        $("#loginRegisterForm").css("display","none");
+                        $("#logoutBotton").css("display","block");
+                    }
+        }
+
+        function LoadPage(url) {
+            $.ajax({
+                method : "get",
+                url : url,
+                success : (data)=>{
+                    $("section").html(data);
+                }
+            })
+            Loadcookie();
+        }
+
+        function uploadImage(e){
+            let file = e.target.files[0];
+            let files = new FileReader();
+            console.log("DATA"+file);
+        }
+
+        function CartCount(){
+            var Cart = $.cookie("User");
+            $("#CartCountItems").html("");
+            $.ajax({
+                method:"get",
+                url:`http://127.0.0.1:50505/Cart/Items/${Cart}`,
+                success:(data)=>{
+                    $("#CartCountItems").html($(data).length);
+                    // console.log($(data).length);
+                }
+            })
+        }
+
+        function LoadCartitems(){
+            $("#cart-body").html("");
+            var Cart = $.cookie("User");
+
+                $.ajax({
+                method:"get",
+                url:`http://127.0.0.1:50505/Cart/Items/${Cart}`,
+                success:(data)=>{
+                    // console.log($(data).length);
+                        for(var Item of data){
+                            $("#cart-body").append(`
+                           <tr>
+                                 <td>${Item.Title}</td>
+                                 <td><img src="${Item.Image}" height="80px" width="80px"></td>
+                                 <td><h2>${Item.Price}</h2></td>
+                                 <td><button name="${Item.Id}" id="removeFromCart" class="btn btn-outline-danger ms-2" ><span class="bi bi-trash"></span></td>
+                             </tr>
+                         `);
+                        }
+                }
+            })
+        };
+
+        function LoadCategories(){
+            $.ajax({
+                method:"get",
+                url: "http://127.0.0.1:50505/Categories",
+                success:(categories)=>{
+                    $.each(categories,(key,category)=>{
+                        $("select").append(`
+                        <option>${category.CategoryName}</option>
+                        `);
+                    })
+                }
+            })
+        }
+
+        function categoryChange(e){
+            $("#center").html("");
+            var Category = $("#Categories").val();
+            if(Category=="All"){
+                LoadProducts("http://127.0.0.1:50505/Products");
+            }else{
+                LoadProducts(`http://127.0.0.1:50505/Categories/${Category}`);
+            }
+        }
+
+        function LoadProducts(url){
+            $.ajax({
+                method:"get",
+                url: url,
+                success:(products)=>{
+                    $.each(products,(key,product)=>{
+                        $("#center").append(`
+                        <div>
+                            <div class="card p-2 m-2">
+                                <img src="${product.Image}" class="card-img-top" height="300px" width="100px" alt="">
+                            <div class="card-header" style="height:250px;">
+                                ${product.Title}
+                            </div>
+                            <div class="card-body text-center" style="background-color:#000; color:#fff;">
+                              &#8377;  ${product.Price}
+                            </div>
+
+                            <div class="card-footer">
+                                <button name="${product.Id}" id="cartAdd" class="btn btn-primary"><span class="bi bi-cart3"></span>Add to Cart</button>
+                            </div>
+                        </div>
+                        `);
+                    })
+                }
+            })
+        }
+
+        var qrcode = new QRCode("qrcode");
+
+function makeCode () {
+  var elText = document.getElementById("text");
+  
+  if (!elText.value) {
+    // alert("Input a text");
+    // elText.focus();
+    // return;
+  }
+  
+  qrcode.makeCode(elText.value);
+}
+
+makeCode();
+
+$("#text").on("blur", function () {
+  makeCode();
+}).on("keydown", function (e) {
+  if (e.keyCode == 13) {
+    makeCode();
+  }
+});
+        
+
+        $(document).on("click","#cartItems",()=>{
+            $("#cart-body").html("");
+            if($.cookie("User")===undefined || $.cookie("User")===""){
+                location.href="index.html";
+                LoadPage("ishop-login.html");
+                }else{
+                    LoadCartitems();
+                    CartCount();
+                }
+        })
+        
+        $(document).on("click","#removeFromCart",(e)=>{
+            var id = parseInt(e.currentTarget.name);
+            var flag = confirm("Are You Sure Want to Delete the Item ?");
+            $("#cart-body").html("");
+            if(flag==true){
+                $.ajax({
+                method:"delete",
+                url:`http://127.0.0.1:50505/removeItem/Id/${id}`
+                })
+                alert("Item Deleted");
+                LoadCartitems();
+                CartCount();
+                }else{
+                    LoadCartitems();
+                    CartCount();
+                }
+             })
+
+        $(document).on("keyup","#userFirstName",()=>{
+                if($("#userFirstName").val()!=""){
+                    document.getElementById("userLastName").disabled = true ? false :true;
+                }
+            })
+
+            $(document).on("keyup","#userLastName",()=>{
+                if($("#userLastName").val()!=""){
+                    document.getElementById("userDate_Of_Birth").disabled = true ? false :true;
+                }
+            })
+
+            
+            $(document).on("keyup","#userDate_Of_Birth",()=>{
+                if($("#userDate_Of_Birth").val()!=""){
+                    document.getElementById("userEmail").disabled = true ? false :true;
+                }
+            })
+
+
+            $(document).on("keyup","#userGender",()=>{
+                if($("#userGender").val()!=""){
+                    document.getElementById("Userid").disabled = true ? false :true;
+                }
+            })
+
+            $(document).on("keyup","#Userid",()=>{
+                if($("#Userid").val()===""){
+                    document.getElementById("userPassword").disabled = true; 
+                }else{
+                    document.getElementById("userPassword").disabled = false;
+
+                    $.ajax({
+                    method:"get",
+                    url:"http://127.0.0.1:50505/Users",
+                    success:(Users)=>{
+                        for(var User of Users){
+                            var user = Users.find((u)=>{
+                            u.Userid===$("#Userid").val()
+                            });
+                            if(User.Userid===$("#Userid").val()){
+                                $("#userIdError").html("Id Not Available Try Another...").css("color","red");
+                                break;
+                            }else{
+                                $("#userIdError").html("Id Available").css("color","green");
+                                break;
+                            }
+                        }
+                    }
+                })
+
+                }
+            })
+
+            function LoadUserinfo(){
+                var user = $.cookie("User");
+                $.ajax({
+                    method:"get",
+                    url:`http://127.0.0.1:50505/Users/${user}`,
+                    success:(data)=>{
+                        $.each(data,(key,User)=>{
+                            $("#detail-modal").html(`
+                                <ul style="list-style:none;">
+                                    <li>${User.FirstName} ${User.LastName}</li>
+                                    <li>${User.Date_Of_Birth}</li>
+                                    <li>${User.Email}</li>
+                                    <li>${User.Gender}</li>
+                                    <li>${User.Mobile}</li>
+                                    <li>${User.Street} ${User.City} ${User.State} ${User.Pincode} ${User.Country}</li>
+                                </ul>
+                            `);
+                        })
+                    }
+                })
+            }
+
+
+            $(document).on("keyup","#userPassword",()=>{
+                if($("#userPassword").val()!=""){
+                    document.getElementById("confirmPassword").disabled = true ? false :true;
+                }
+            })
+
+            $(document).on("keyup","#confirmPassword",()=>{
+                var Password = $("#userPassword").val();
+                var cnfPassword =  $("#confirmPassword").val();
+                // alert(`${Password} \n ${cnfPassword}`);
+                if(cnfPassword==Password){
+                    document.getElementById("confirmPassworderror").style.display = "none";
+                    document.getElementById("registerClick").disabled = false;
+                }else{
+                    document.getElementById("confirmPassworderror").style.display = "block";
+                    document.getElementById("registerClick").disabled = true;
+                }
+            })
+        
+        $(function(){
+            LoadPage("ishop-home.html");
+
+
+            $(document).on("click","#registerForm",()=>{
+                LoadPage("ishop-customerRegister.html");
+                Loadcookie();
+            })
+
+            $("#home").click(()=>{
+                LoadPage("ishop-home.html");
+                Loadcookie();
+            })
+
+            $("#ishop-about").click(()=>{
+                LoadPage("ishop-about.html");
+                Loadcookie();
+                console.log("About to load");
+            })
+
+            
+            $("#system-requirement").click(()=>{
+                LoadPage("ishop-requirement.html");
+                Loadcookie();
+            })
+
+            $("#contact-details").click(()=>{
+                LoadPage("ishop-contact.html");
+                Loadcookie();
+            })
+
+            $(document).on("click","#loginForm",()=>{
+                LoadPage("ishop-login.html");
+                Loadcookie();
+            })
+
+
+            $(document).on("click","#cartAdd",(e)=>{
+            var Cart = $.cookie("User");
+            if(Cart===undefined || Cart===""){
+                LoadPage("ishop-login.html");
+            }else{
+                $.ajax({
+                method:"get",
+                url:`http://127.0.0.1:50505/Products/Id/${e.target.name}`,
+                success:(data)=>{
+                    $.each(data,(key,product)=>{
+                        // alert(`${product.Title} \n Added to Cart`);
+                        var Items = {
+                            Id: product.Id,
+                            Title: product.Title,
+                            Image: product.Image,
+                            Price: product.Price,
+                            Category: product.Category
+                        };
+                        var flag = confirm(`Do You Want To Add ${product.Title} To cart ?`)
+                        if(flag==true){
+                            $.ajax({
+                                    method:"put",
+                                    url:`http://127.0.0.1:50505/Carts/additem/${Cart}`,
+                                    data: Items
+                                })
+                                
+                        CartCount();
+                        }
+                    })
+                }
+            })
+            }
+        })
+
+        $(document).on("click","#userAccountinfo",()=>{
+            if($.cookie("User")===undefined || $.cookie("User")===""){
+                alert("Please Login First.............");
+                // location.href="http://127.0.0.1:5500/index.html#";
+                // LoadPage("ishop-login.html");
+                Loadcookie();
+            }else{
+                LoadUserinfo();
+                Loadcookie();
+            }
+        })
+
+        $("#btnLogout").click(()=>{
+            var flag = confirm("Are You Sure?? \n You Want To Logout???")
+            if(flag==true){
+                $.removeCookie("User");
+                LoadPage("#index.html");
+            }else{
+                alert("Cancelled.........");
+            }
+        })
+            
+
+            $(document).on("click","#registerClick",()=>{
+                var new_User = {
+                    FirstName: $("#userFirstName").val(),
+                    LastName: $("#userLastName").val(),
+                    Date_Of_Birth: $("#userDate_Of_Birth").val(),
+                    Email: $("#userEmail").val(),
+                    Gender: $("#userGender").val(),
+                    Userid: $("#Userid").val(),
+                    Company: $("#userCompany").val(),
+                    Street: $("#userStreet").val(),
+                    City: $("#userCity").val(),
+                    State: $("#userState").val(),
+                    Pincode: $("#userPincode").val(),
+                    Country: $("#userCountry").val(),
+                    Mobile: $("#userMobile").val(),
+                    Fax: $("#userFax").val(),
+                    Password: $("#userPassword").val()
+                };
+
+                    $.ajax({
+                        method:"post",
+                        url:"http://127.0.0.1:50505/newUser",
+                        data: new_User
+                    });
+                    alert("User Added");
+                    var new_cart={
+                        CartId: $("#Userid").val(),
+                        Items:[]
+                    };
+                    $.ajax({
+                        method:"post",
+                        url:"http://127.0.0.1:50505/newCart",
+                        data: new_cart
+                    })
+                    alert("Cart Added");
+                    location.href="index.html";
+                    Loadcookie();
+                });
+            
+            $("#adminForm").click(()=>{
+                LoadPage("admin-login.html");
+            })
+
+            $(document).on("click","#userLoginClick",(req,res)=>{
+                $.ajax({
+                    method:"get",
+                    url:"http://127.0.0.1:50505/Users",
+                    success:(Users)=>{
+                        $.each(Users,(key,User)=>{
+                            var user = Users.find((u)=>{
+                            u.Userid===$("#userLoginId").val()  && u.Password===$("#userLoginPassword").val()
+                            });
+                            if(User.Userid===$("#userLoginId").val()  && User.Password===$("#userLoginPassword").val()){
+                                alert("Logged In Successfully");
+                                $.cookie("User",$("#userLoginId").val());
+                                    LoadProducts("http://127.0.0.1:50505/Products");
+                                    LoadCategories();
+                                    categoryChange();
+                                    // CartCount();
+                                    Loadcookie();
+                                    LoadPage("ishop-catalog.html");
+                            }else if(User.Userid!=$("#userLoginId").val()  || User.Password!=$("#userLoginPassword").val()){
+                                if(User.Userid===$("#userLoginId").val()  && User.Password!=$("#userLoginPassword").val()){
+                                    alert("Invalid Password");
+                                    LoadPage("ishop-login.html");
+                                    Loadcookie();
+                                }else if(User.Userid!=$("#userLoginId").val()  && User.Password===$("#userLoginPassword").val()){
+                                    alert("Invalid User Id");
+                                    LoadPage("ishop-login.html");
+                                    Loadcookie();
+                                }else{
+                                    // LoadPage("ishop-login.html");
+                                    // Loadcookie();
+                                    $("#lblUserLoginError").css("display","block");
+                                    $("#lblUserLoginError").css("text-align","center");
+                                }
+                            }
+                            
+                        })
+                    }
+                })
+            })
+
+            $(document).on("click","#adminClick",(req,res)=>{
+                $.ajax({
+                    method:"get",
+                    url:"http://127.0.0.1:50505/Admins",
+                    success:(Admins)=>{
+                        $.each(Admins,(key,Admin)=>{
+                            var admin = Admins.find((a)=>{
+                            a.AdminId==$("#adminUsername").val()  && a.Password==$("#adminPassword").val()
+                            });
+                            if(Admin.AdminId==$("#adminUsername").val()  && Admin.Password==$("#adminPassword").val()){
+                                alert("Logged In Successfully");
+                                $.cookie("Admin",$("#adminUsername").val());
+                                location.href="pages.html";
+                            }else if(Admin.AdminId!==$("#adminUsername").val()  || Admin.Password!==$("#adminPassword").val()){
+                                alert("Invalid Details");
+                            }
+                        })
+                    }
+                })
+            })
+
+            // $(document).on("blur","#adminUsername",()=>{
+            //     $.ajax({
+            //         method:"get",
+            //         url:"http://127.0.0.1:50505/Admins",
+            //         success:(Admins)=>{
+            //             $.each(Admins,(key,Admin)=>{
+            //                 var admin = Admins.find((a)=>{
+            //                 a.Id=$("#adminUsername").val();
+            //             });
+            //             if(Admin.AdminId==$("#adminUsername").val()){
+            //                 alert('press');
+            //                 $("#adminidError").html("Matched");
+            //             }else{
+            //                 $("#useridError").html("Invalid Match");
+            //             }
+            //             })
+            //         }
+            //     })
+            // })
+
+
+            $("#ishop-site").click(()=>{
+                LoadProducts("http://127.0.0.1:50505/Products");
+                LoadCategories();
+                categoryChange();
+                // CartCount();
+                LoadPage("ishop-catalog.html");
+                Loadcookie();
+            })
+
+        })
+    </script>
+</head>
+<body>
+    <div id="main-body">
+        <header class="d-flex flex-wrap">
+            <div>
+                <h1><font face="Edwardian Script ITC" color="red"><b>I Shop-Model</b></font></h1>
+            </div>
+            <div>
+                <p id="head-p">A model for<br>Smart Shopping</p>
+                <div>
+                    <span id="logoutBotton" style="display: none;">
+                        <button id="btnLogout" class="btn btn-danger">Log-Out</button>
+                        <span class="bi bi-person-fill" id="userAccountinfo" data-bs-toggle="modal" data-bs-target="#details">
+                            <div class="modal" id="details">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header text-center">
+                                            <h3>Your Personal Details</h3>
+                                            <button class="btn btn-close btn-lg" data-bs-dismiss="modal"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div style="display: flex;  margin: 10px;">
+                                                <div>
+                                                    <ol style="list-style: none; width: 150px;">
+                                                        <li>Name</li>
+                                                        <li>Date Of Birth</li>
+                                                        <li>Email</li>
+                                                        <li>Gender</li>
+                                                        <li>Mobile No.</li>
+                                                        <li>Address</li>
+                                                    </ol>
+                                                </div>
+                                                <div id="detail-modal" class="ms-2">
+    
+                                                </div>
+                                                <!-- <div style="display: flex; justify-content: space-around;">
+                                                    <label for="userName">Username</label>
+                                                    <label id="lblUsername"></label>
+                                                </div>
+                                                <div style="display: flex; justify-content: space-around;">
+                                                    
+    
+                                                    <label for="DOB">Date of Birth</label>
+                                                    <label id="lblDob"></label>
+                                                </div>
+                                                <div style="display: flex; justify-content: space-around;">
+                                                    <label for="email">Email</label>
+                                                    <label id="lblEmail"></label>
+                                                </div>
+                                                <div  style="display: flex; justify-content: space-around;">
+                                                    <label for="gender">Gender</label>
+                                                    <label id="lblGender"></label>
+                                                </div>
+                                                <div style="display: flex; justify-content: space-around;">
+                                                    <label for="mobile">Mobile No.</label>
+                                                    <label id="lblMobile"></label>
+                                                </div>
+                                                <div style="display: flex; justify-content: space-around;">
+                                                    <label for="address">Address</label>
+                                                    <label id="lblAddress"></label>
+                                                </div>
+                                                <div style="display: flex; justify-content: space-around;">
+                                                    <label for="city">City</label>
+                                                    <label id="lblCity"></label>
+                                                </div>
+                                                <div style="display: flex; justify-content: space-around;">
+                                                    <label for="state">State</label>
+                                                    <label id="lblState"></label>
+                                                </div> -->
+                                            </div>
+                                            <div class="modal-footer d-flex justify-content-center">
+                                                <button class="btn btn-lg btn-primary" data-bs-dismiss="modal">OK</button>
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </span>
+                    </span>
+                    <span id="loginRegisterForm">
+                        <button class="btn btn-outline-light" id="loginForm">Login</button>
+                        <button class="btn btn-primary" id="registerForm">Register</button>
+                    </span>
+                </div>
+            </div>
+        </header>
+        <div style="background-color: blue; height: 5px;">
+        </div>
+        <nav class="d-flex flex-wrap">
+            <div><a href="javascript:void()" id="home">Home</a></div>
+            <div><a href="javascript:void()" id="ishop-about">About I-shop Model</a></div>
+            <div><a href="javascript:void()" id="ishop-site">I-shop site</a></div>
+            <div><a href="javascript:void()" id="system-requirement">System Requirements</a></div>
+            <div><a href="javascript:void()" id="contact-details">Contact Details</a></div>
+        </nav>
+        <section>
+        </section>
+        <footer>
+            <div style="color: #fff; text-align: center; margin-top: 20px;">2023<sup>&copy;</sup> ishop Shopping Model<br>
+                Powered by Ram<br>
+                <button class="m-2 btn btn-danger" id="adminForm">Admin Section</button>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>

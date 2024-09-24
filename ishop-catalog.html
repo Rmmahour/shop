@@ -1,0 +1,108 @@
+<div id="catalog">
+    <div id="head">
+        <div>
+            <p>i-Shop: A MODEL FOR SMART SHOPPING</p>
+        </div>
+        <div class="btn-group">
+            <button class="btn btn-outline-light" id="cartItems" data-bs-target="#added-items" data-bs-toggle="modal"><span class="bi bi-cart4"> Cart Contents</span></button>
+                <div class="modal" id="added-items">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header justify-content-between text-center">
+                                <h3>Your Cart Items</h3>
+                                <button class="btn btn-close btn-lg" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div id="detail-modal">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <!-- <th>Image</th> -->
+                                                <th>Price</th>
+                                                <th>Remove</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="cart-body">
+                
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="modal-footer d-flex justify-content-center">
+                                    <button class="btn btn-lg btn-primary" data-bs-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <button class="btn btn-outline-light" data-bs-toggle="modal" id="userAccountinfo" data-bs-target="#details"><span class="bi bi-person-fill"> My Account</span></button>
+        </div>
+    </div>
+    <div id="main-catalog">
+        <div id="left">
+            <div class="dropdown ms-2">
+                <select id="Categories" onchange="categoryChange(event)" class="p-2 fw-bold">
+                    
+                </select>
+            </div>
+            <div class="mt-2 container-fluid">
+                <div class="card w-100">
+                    <img class="card-img-top" src="./public/images/fruits.jpg">
+                    <div class="card-header text-center">
+                        <h4>Today's<br>Top on Selling</h4>
+                    </div>
+                    <div class="card-body text-center mt-2">
+                        <h5>Fruits</h5>
+                        <p>&#8377; 199</p>
+                    </div>
+                </div>
+                <div id="info" style="border: 1px solid#000;">
+                    <h4 class="bg-dark text-light text-center">Information</h4>
+                    <div class="p-2">
+                        <h6><a href="#">Shipping & Returns</a></h6>
+                        <h6><a href="#">Privacy Notice</a></h6>
+                        <h6><a href="#">Conditions of Use</a></h6>
+                        <h6><a href="#">Contact Us</a></h6>
+                    </div>
+                </div>
+                <div id="payment-ways" style="border: 1px solid#000;">
+                    <h4 class="bg-dark text-light text-center">We Accept</h4>
+                    <img src="./public/images/Best-UPI-Payment-Apps-in-India.jpg" class="card-img-top">
+                </div>
+            </div>
+        </div>
+        <div id="center">
+
+        </div>
+        <div id="right">
+            <div class="container-fluid">
+                <div id="cart-counts">
+                    <h4 class="bg-dark text-light text-center">Shopping Cart</h4>
+                    <div class="p-2" style="border: 1px solid#000;">
+                        [<span id="CartCountItems"> </span>] &nbsp; Your Items 
+                    </div>
+                </div>
+                <div style="border: 1px solid#000;">
+                    <h4 class="bg-dark text-light text-center">Bestsellers</h4>
+                    <div class="p-2">
+                        <ol type="1">
+                            <li><h6><a href="#">Necklace</a></h6></li>
+                            <li><h6><a href="#">Black Shirt</a></h6></li>
+                            <li><h6><a href="#">Suit</a></h6></li>
+                            <li><h6><a href="#">Kurta</a></h6></li>
+                            <li><h6><a href="#">Nike</a></h6></li>
+                            <li><h6><a href="#">Bakka Bukki</a></h6></li>
+                        </ol>
+                    </div>
+                </div>
+                <div style="border: 1px solid#000;">
+                    <h4 class="bg-dark text-light text-center">Reviews</h4>
+                    <div class="p-2">
+                        <h6>There are currently no product reviews</h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
